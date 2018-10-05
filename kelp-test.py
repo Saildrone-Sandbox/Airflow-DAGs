@@ -23,14 +23,8 @@ dag = DAG('download_kelp', description='Simple DAG to download all drones from K
           schedule_interval='*/15 * * * *',
           start_date=datetime(2017, 3, 20), catchup=False)
 
-check_file_operator = FileSensor(filepath='/tmp/kelp_drones.json',
-                                 fs_conn_id='fs_default',
-                                 task_id='test_file',
-                                 poke_interval=5)
-
 download_operator = PythonOperator(task_id='download_kelp',
                                    python_callable=download_kelp,
                                    dag=dag,
                                    provide_context=True)
 
-download_operator.set_upstream(check_file_operator)
