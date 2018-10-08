@@ -18,7 +18,7 @@ def download_kelp(**context):
     file_name = os.path.join('/tmp', 'kelp_drones_{}.json'.format(execution_date_str))
 
     with open(file_name, 'w+') as f:
-        r = requests.get('https://kelp.stage.saildrone.com/inventory/drones')
+        r = requests.get('https://kelp.saildrone.com/inventory/drones')
         json.dump(r.json(), f, indent=2)
 
 
