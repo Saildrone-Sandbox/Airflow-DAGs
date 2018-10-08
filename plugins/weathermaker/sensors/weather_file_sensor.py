@@ -11,5 +11,5 @@ class WeatherFileSensor(BaseSensorOperator):
         self.forecast_type = forecast_type
 
     def poke(self, context):
-        print context.get('task_instance').execution_date
+        print(context.get('task_instance').execution_date)
         return True
