@@ -5,7 +5,6 @@ import requests
 from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.contrib.sensors.file_sensor import FileSensor
 
 
 def download_kelp(**context):
@@ -27,4 +26,3 @@ download_operator = PythonOperator(task_id='download_kelp',
                                    python_callable=download_kelp,
                                    dag=dag,
                                    provide_context=True)
-
