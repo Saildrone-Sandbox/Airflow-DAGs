@@ -41,6 +41,7 @@ for i in range(1, 29):
                                       dag=dag)
 
     ungrib_op = KubernetesPodOperator(namespace='airflow',
+                                      name='run_ungrib_{}'.format(forecast_hour),
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
                                       provide_context=True,
