@@ -12,7 +12,7 @@ class WeatherFileSensor(BaseSensorOperator):
     @apply_defaults
     def __init__(self, forecast_hour, forecast_type, *args, **kwargs):
         super(WeatherFileSensor, self).__init__(*args, **kwargs)
-        self.forecast_hour = forecast_hour
+        self.forecast_hour = int(forecast_hour)
         self.forecast_type = forecast_type
 
     def poke(self, context):
@@ -26,7 +26,7 @@ class WeatherFileSensor(BaseSensorOperator):
 
         execution_date = context.get('task_instance').execution_date
 
-        file_name = '{f_type}.t{hour}z.awip32.0p25.f{f_hour}.{year}.{month}.{date}'
+        file_name = '{f_type}.t{hour}z.awip32.0p25.f{f_hour:03d}.{year}.{month}.{date}'
         file_name = file_name.format(f_type=self.forecast_type,
                                      hour=hour,
                                      f_hour=self.forecast_hour,
