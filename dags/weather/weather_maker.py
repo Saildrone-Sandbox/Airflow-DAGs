@@ -8,9 +8,6 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.operators import WeatherFileSensor
 
 
-NAM_BASE_DIR = '/data/weatherdata/nam'
-
-
 def download_kelp(**context):
     execution_date_dt = context['execution_date']
     execution_date_str = execution_date_dt.isoformat()

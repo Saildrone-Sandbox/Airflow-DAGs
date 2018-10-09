@@ -1,5 +1,10 @@
+import os
+
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
 from airflow.utils.decorators import apply_defaults
+
+
+NAM_BASE_DIR = '/data/weatherdata/nam'
 
 
 class WeatherFileSensor(BaseSensorOperator):
@@ -11,5 +16,28 @@ class WeatherFileSensor(BaseSensorOperator):
         self.forecast_type = forecast_type
 
     def poke(self, context):
-        print(context.get('task_instance').execution_date)
-        return True
+
+        year = '2018'
+        month = '09'
+        date = '10'
+        hour = '06'
+
+        file_dir = os.path.join(NAM_BASE_DIR, year, month, date, hour, 'native')
+
+        execution_date = context.get('task_instance').execution_date
+
+        file_name = '{f_type}.t{hour}z.awip32.0p25.f{f_hour}.{year}.{month}.{date}'
+        file_name = file_name.format(f_type=self.forecast_type,
+                                     hour=hour,
+                                     f_hour=self.forecast_hour,
+                                     year=year,
+                                     month=month,
+                                     date=date)
+
+        file_path = os.path.join(file_dir, file_name)
+
+        print('execution_date type: ' + type(execution_date))
+        print('execution_date: ' + execution_date)
+        print('looking for file_path: ' file_path)
+
+        return os.path.exists(file_path)
