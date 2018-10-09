@@ -38,6 +38,6 @@ class WeatherFileSensor(BaseSensorOperator):
 
         print('execution_date type: ' + type(execution_date))
         print('execution_date: ' + execution_date)
-        print('looking for file_path: ' file_path)
+        print('looking for file_path: ' + file_path)
 
         return os.path.exists(file_path)
