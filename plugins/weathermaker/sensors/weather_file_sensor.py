@@ -36,7 +36,7 @@ class WeatherFileSensor(BaseSensorOperator):
 
         file_path = os.path.join(file_dir, file_name)
 
-        print('execution_date type: ' + type(execution_date))
+        print('execution_date type: ' + str(type(execution_date)))
         print('execution_date: ' + execution_date)
         print('looking for file_path: ' + file_path)
 
