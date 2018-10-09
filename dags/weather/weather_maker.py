@@ -40,7 +40,8 @@ for i in range(1, 29):
                                       poke_interval=5,
                                       dag=dag)
 
-    ungrib_op = KubernetesPodOperator(task_id='run_ungrib_{}'.format(forecast_hour),
+    ungrib_op = KubernetesPodOperator(namespace='airflow',
+                                      task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
                                       provide_context=True,
                                       image='hello-world')
