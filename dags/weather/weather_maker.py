@@ -6,6 +6,7 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators import WeatherFileSensor
+from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 
 
 def download_kelp(**context):
@@ -39,10 +40,10 @@ for i in range(1, 29):
                                       poke_interval=5,
                                       dag=dag)
 
-    ungrib_op = PythonOperator(task_id='run_ungrib_{}'.format(forecast_hour),
-                               python_callable=download_kelp,
-                               dag=dag,
-                               provide_context=True)
+    ungrib_op = KubernetesPodOperator(task_id='run_ungrib_{}'.format(forecast_hour),
+                                      dag=dag,
+                                      provide_context=True,
+                                      image='hello-world')
 
     ungrib_op.set_upstream(check_file_op)
 
