@@ -31,7 +31,7 @@ metgrib_op = PythonOperator(task_id='metgrid',
 
 ungrib_operators = []
 
-for i in range(1, 29):
+for i in range(1, 4):
     forecast_hour = i * 3
 
     check_file_op = WeatherFileSensor(forecast_type='nam',
@@ -44,8 +44,8 @@ for i in range(1, 29):
                                       name='run-ungrib-{}'.format(forecast_hour),
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
-                                      provide_context=True,
-                                      image='hello-world')
+                                      image='wrf',
+                                      image_pull_secrets='quayio-pull')
 
     ungrib_op.set_upstream(check_file_op)
 
