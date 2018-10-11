@@ -44,7 +44,7 @@ for i in range(1, 4):
                                       name='run-ungrib-{}'.format(forecast_hour),
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
-                                      image='wrf',
+                                      image='quay.io/sdtechops/wrf',
                                       image_pull_secrets='quayio-pull')
 
     ungrib_op.set_upstream(check_file_op)
