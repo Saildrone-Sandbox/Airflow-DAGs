@@ -10,6 +10,7 @@ from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOpera
 
 
 NAM_BASE_DIR = '/data/weatherdata/nam'
+EXECUTE_DIR = '/tmp'
 
 
 def download_kelp(**context):
@@ -36,20 +37,33 @@ ungrib_operators = []
 
 for i in range(1, 4):
     forecast_hour = i * 3
-    file_path = '{% "/data/weatherdata/nam/2018/09/10/06/native/nam.t00z" + ".awip32.0p25" %}'
+
+    dir_template = '{{ params.base_dir }}/{{execution_date.strftime("%Y/%m/%d/%H")}}/native'
+    filename_template = '{{params.f_type}}.t06z.awip32.0p25.f{{params.f_hour}}.{{execution_date.strftime("%Y")}}.09.10'
+    file_path = dir_template + filename_template
 
     check_file_op = WeatherFileSensor(file_path=file_path,
                                       task_id='weather_file_sensor_{}'.format(forecast_hour),
                                       poke_interval=5,
-                                      dag=dag)
+                                      dag=dag,
+                                      params={'base_dir': NAM_BASE_DIR,
+                                              'f_type': 'nam',
+                                              'f_hour': '{:03d}'.format(i)})
 
+    pod_args = ['ln', '-sf', file_path, os.path.join(EXECUTE_DIR, 'GRIBFILE.AAA'), ';',
+                'cd', EXECUTE_DIR, ';',
+                '/wrf/WPS-3.9.1/ungrib.exe']
     ungrib_op = KubernetesPodOperator(namespace='airflow',
                                       name='run-ungrib-{}'.format(forecast_hour),
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
                                       image='quay.io/sdtechops/wrf:0.1.0',
                                       image_pull_secrets='quayio-pull',
-                                      cmds=['bash', '-cx'])
+                                      cmds=['bash', '-cx'],
+                                      arguments=pod_args,
+                                      params={'base_dir': NAM_BASE_DIR,
+                                              'f_type': 'nam',
+                                              'f_hour': '{:03d}'.format(i)})
 
     ungrib_op.set_upstream(check_file_op)
 
