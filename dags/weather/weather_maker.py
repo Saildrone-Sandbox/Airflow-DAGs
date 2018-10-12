@@ -51,7 +51,7 @@ for i in range(1, 4):
                                       dag=dag,
                                       params={'base_dir': NAM_BASE_DIR,
                                               'f_type': 'nam',
-                                              'f_hour': '{:03d}'.format(i)})
+                                              'f_hour': '{:03d}'.format(forecast_hour)})
 
     pod_args = ['ln', '-sf', file_path, os.path.join(EXECUTE_DIR, 'GRIBFILE.AAA'), ';',
                 'cd', EXECUTE_DIR, ';',
