@@ -8,6 +8,18 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.operators import WeatherFileSensor
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 
+volume_mount = VolumeMount('test-dir',
+                            mount_path='/data',
+                            sub_path='ungrib_test',
+                            read_only=True)
+
+volume_config= {
+    'persistentVolumeClaim':
+      {
+        'claimName': 'airflow'
+      }
+    }
+volume = Volume(name='test-dir', configs=volume_config)
 
 def download_kelp(**context):
     execution_date_dt = context['execution_date']
@@ -44,6 +56,8 @@ for i in range(1, 4):
                                       name='run-ungrib-{}'.format(forecast_hour),
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
+			              volume=[volume],
+                                      volume_mounts=[volume_mount],
                                       image='quay.io/sdtechops/wrf:0.1.0',
                                       image_pull_secrets='quayio-pull')
 
