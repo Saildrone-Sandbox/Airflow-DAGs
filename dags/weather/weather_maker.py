@@ -7,17 +7,16 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators import WeatherFileSensor
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.contrib.kubernetes.volume_mount import VolumeMount
+from airflow.contrib.kubernetes.volume import Volume
 
 volume_mount = VolumeMount('test-dir',
-                            mount_path='/data',
-                            sub_path='ungrib_test',
-                            read_only=True)
+                           mount_path='/data',
+                           sub_path='ungrib_test',
+                           read_only=True)
 
-volume_config= {
-    'persistentVolumeClaim':
-      {
-        'claimName': 'airflow'
-      }
+volume_config = {
+    'persistentVolumeClaim': {'claimName': 'airflow'}
     }
 volume = Volume(name='test-dir', configs=volume_config)
 
