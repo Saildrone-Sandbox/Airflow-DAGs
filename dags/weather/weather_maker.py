@@ -12,7 +12,7 @@ from airflow.contrib.kubernetes.volume import Volume
 
 volume_mount = VolumeMount('test-dir',
                            mount_path='/data',
-                           sub_path='ungrib_test',
+                           sub_path=False,
                            read_only=True)
 
 volume_config = {
@@ -64,7 +64,10 @@ for i in range(1, 4):
                                               'f_type': 'nam',
                                               'f_hour': '{:03d}'.format(forecast_hour)})
 
+    # ungrib.exe must run in the same dir that the three input files are in
     pod_args = ['ln -sf ' + file_path + ' ' + os.path.join(EXECUTE_DIR, 'GRIBFILE.AAA') + ';' +
+                'ln -sf /data/ungrib_test/ungrib/Vtable /tmp/Vtable;' +
+                'ln -sf /data/ungrib_test/ungrib/namelist.wps /tmp/namelist.wps;' +
                 'cd ' + EXECUTE_DIR + ';' +
                 '/wrf/WPS-3.9.1/ungrib.exe']
     ungrib_op = KubernetesPodOperator(namespace='airflow',
