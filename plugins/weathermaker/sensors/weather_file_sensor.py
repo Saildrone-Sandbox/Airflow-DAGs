@@ -17,7 +17,7 @@ class WeatherFileSensor(BaseSensorOperator):
     template_fields = ('file_path', )
 
     @apply_defaults
-    def __init__(self, file_path, forecast_type, *args, **kwargs):
+    def __init__(self, file_path, *args, **kwargs):
         super(WeatherFileSensor, self).__init__(*args, **kwargs)
         self.file_path = file_path
 
