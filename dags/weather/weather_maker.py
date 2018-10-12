@@ -65,7 +65,7 @@ for i in range(1, 4):
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
                                               'f_type': 'nam',
-                                              'f_hour': '{:03d}'.format(i)})
+                                              'f_hour': '{:03d}'.format(forecast_hour)})
 
     ungrib_op.set_upstream(check_file_op)
 
