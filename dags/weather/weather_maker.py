@@ -53,8 +53,8 @@ for i in range(1, 4):
                                               'f_type': 'nam',
                                               'f_hour': '{:03d}'.format(forecast_hour)})
 
-    pod_args = ['ln -sf' + file_path + os.path.join(EXECUTE_DIR, 'GRIBFILE.AAA') + ';',
-                'cd ' + EXECUTE_DIR + ';',
+    pod_args = ['ln -sf ' + file_path + ' ' + os.path.join(EXECUTE_DIR, 'GRIBFILE.AAA') + ';' +
+                'cd ' + EXECUTE_DIR + ';' +
                 '/wrf/WPS-3.9.1/ungrib.exe']
     ungrib_op = KubernetesPodOperator(namespace='airflow',
                                       name='run-ungrib-{}'.format(forecast_hour),
