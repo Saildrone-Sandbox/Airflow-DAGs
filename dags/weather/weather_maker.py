@@ -36,7 +36,7 @@ ungrib_operators = []
 
 for i in range(1, 4):
     forecast_hour = i * 3
-    file_path = '{% "/data/weatherdata/nam/" + {{ execution_date.strftime("%Y/%m/%d")}} %}'
+    file_path = '{% "/data/weatherdata/nam/2018/09/10/06/native/nam.t00z" + ".awip32.0p25" %}'
 
     check_file_op = WeatherFileSensor(file_path=file_path,
                                       task_id='weather_file_sensor_{}'.format(forecast_hour),
