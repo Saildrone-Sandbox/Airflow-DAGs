@@ -60,7 +60,6 @@ for i in range(1, 4):
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
                                       image='quay.io/sdtechops/wrf:0.1.0',
-                                      image_pull_secrets='quayio-pull',
                                       cmds=['bash', '-cx'],
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
