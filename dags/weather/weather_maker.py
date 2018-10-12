@@ -38,9 +38,9 @@ ungrib_operators = []
 for i in range(1, 4):
     forecast_hour = i * 3
 
-    # dir_template = '{{ params.base_dir }}/{{execution_date.strftime("%Y/%m/%d/%H")}}/native/'
+    # dir_template = '{{params.base_dir}}/{{execution_date.strftime("%Y/%m/%d/%H")}}/native/'
     # Use above for real workflow, but need to figure out 00, 06, 12, etc.
-    dir_template = '{{ params.base_dir }}/2018/09/10/06/native/'
+    dir_template = '{{params.base_dir}}/2018/09/10/06/native/'
     filename_template = '{{params.f_type}}.t06z.awip32.0p25.f{{params.f_hour}}.{{execution_date.strftime("%Y")}}.09.10'
     file_path = dir_template + filename_template
 
