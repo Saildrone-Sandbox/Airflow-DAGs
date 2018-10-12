@@ -47,7 +47,7 @@ for i in range(1, 4):
                                       name='run-ungrib-{}'.format(forecast_hour),
                                       task_id='run_ungrib_{}'.format(forecast_hour),
                                       dag=dag,
-                                      image='quay.io/sdtechops/wrf',
+                                      image='quay.io/sdtechops/wrf:0.1.0',
                                       image_pull_secrets='quayio-pull',
                                       cmds=['bash', '-cx'])
 
