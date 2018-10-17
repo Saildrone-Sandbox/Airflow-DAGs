@@ -76,7 +76,7 @@ for i in range(1, 4):
                                       dag=dag,
                                       volumes=[volume],
                                       volume_mounts=[volume_mount],
-                                      image='quay.io/sdtechops/wrf:0.1.0',
+                                      image='quay.io/sdtechops/wrf:latest',
                                       cmds=['bash', '-cx'],
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
