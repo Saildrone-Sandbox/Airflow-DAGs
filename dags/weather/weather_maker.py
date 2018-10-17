@@ -12,7 +12,7 @@ from airflow.contrib.kubernetes.volume import Volume
 
 volume_mount = VolumeMount('test-dir',
                            mount_path='/data',
-                           sub_path='ungrib_test',
+                           sub_path=False,
                            read_only=True)
 
 volume_config = {
@@ -74,6 +74,7 @@ for i in range(1, 4):
                                       volumes=[volume],
                                       volume_mounts=[volume_mount],
                                       image='quay.io/sdtechops/wrf:0.1.0',
+                                      image_pull_policy='Always',
                                       cmds=['bash', '-cx'],
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
