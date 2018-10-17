@@ -12,7 +12,7 @@ from airflow.contrib.kubernetes.volume import Volume
 
 volume_mount = VolumeMount('test-dir',
                            mount_path='/data',
-                           sub_path=False,
+                           sub_path=None,
                            read_only=True)
 
 volume_config = {
