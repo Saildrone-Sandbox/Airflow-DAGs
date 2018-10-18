@@ -52,7 +52,7 @@ for i in range(1, 4):
     # dir_template = '{{params.base_dir}}/{{execution_date.strftime("%Y/%m/%d/%H")}}/native/'
     # Use above for real workflow, but need to figure out 00, 06, 12, etc.
     dir_template = '{{params.base_dir}}/2018/09/10/06/native/'
-    filename_template = '{{params.f_type}}.t06z.awip32.0p25.f{{params.f_hour}}.{{execution_date.strftime("%Y")}}.09.10'
+    filename_template = '{{params.f_type}}.t06z.awip32.0p25.f006.{{execution_date.strftime("%Y")}}.09.10'
     file_path = dir_template + filename_template
 
     check_file_op = WeatherFileSensor(file_path=file_path,
@@ -61,8 +61,7 @@ for i in range(1, 4):
                                       timeout=30,
                                       dag=dag,
                                       params={'base_dir': NAM_BASE_DIR,
-                                              'f_type': 'nam',
-                                              'f_hour': '{:03d}'.format(forecast_hour)})
+                                              'f_type': 'nam'})
 
     # ungrib.exe must run in the same dir that the three input files are in
     pod_args = ['ln -sf ' + file_path + ' ' + os.path.join(EXECUTE_DIR, 'GRIBFILE.AAA') + ';' +
@@ -80,8 +79,7 @@ for i in range(1, 4):
                                       cmds=['bash', '-cx'],
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
-                                              'f_type': 'nam',
-                                              'f_hour': '{:03d}'.format(forecast_hour)})
+                                              'f_type': 'nam'})
 
     ungrib_op.set_upstream(check_file_op)
 
