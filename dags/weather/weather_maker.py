@@ -52,7 +52,7 @@ for i in range(1, 4):
     # dir_template = '{{params.base_dir}}/{{execution_date.strftime("%Y/%m/%d/%H")}}/native/'
     # Use above for real workflow, but need to figure out 00, 06, 12, etc.
     dir_template = '{{params.base_dir}}/2018/09/10/06/native/'
-    filename_template = '{{params.f_type}}.t06z.awip32.0p25.f006.{{execution_date.strftime("%Y")}}.09.10'
+    filename_template = '{{params.f_type}}.t06z.awip32.0p25.f000.{{execution_date.strftime("%Y")}}.09.10'
     file_path = dir_template + filename_template
 
     check_file_op = WeatherFileSensor(file_path=file_path,
