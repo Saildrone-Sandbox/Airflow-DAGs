@@ -46,7 +46,7 @@ metgrib_op = PythonOperator(task_id='metgrid',
 
 ungrib_operators = []
 
-for i in range(1, 4):
+for i in range(1, 29):
     forecast_hour = i * 3
 
     # dir_template = '{{params.base_dir}}/{{execution_date.strftime("%Y/%m/%d/%H")}}/native/'
