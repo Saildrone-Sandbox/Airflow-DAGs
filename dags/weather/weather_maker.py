@@ -79,7 +79,8 @@ for i in range(1, 29):
                                       cmds=['bash', '-cx'],
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
-                                              'f_type': 'nam'})
+                                              'f_type': 'nam'},
+                                      startup_timeout_seconds=240)
 
     ungrib_op.set_upstream(check_file_op)
 
