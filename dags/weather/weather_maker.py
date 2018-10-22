@@ -10,6 +10,8 @@ from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOpera
 from airflow.contrib.kubernetes.volume_mount import VolumeMount
 from airflow.contrib.kubernetes.volume import Volume
 
+from kubernetes import client, config
+
 volume_mount = VolumeMount('test-dir',
                            mount_path='/data',
                            sub_path=None,
@@ -22,6 +24,17 @@ volume = Volume(name='test-dir', configs=volume_config)
 
 NAM_BASE_DIR = '/data/weatherdata/nam'
 EXECUTE_DIR = '/tmp'
+POD_PREFIX= 'run-ungrib'
+
+def clean_completed_pods(**context):
+    config.load_kube_config()
+    v1 = client.CoreV1Api()
+    body = client.V1DeleteOptions()
+    ret = v1.list_namespaced_pod('airflow')
+
+    for pod in ret.items:
+        if pod.metadata.name.startswith('run-ungrib'):
+            v1.delete_namespaced_pod(pod.metadata.name, 'airflow', body)
 
 
 def download_kelp(**context):
@@ -43,6 +56,11 @@ metgrib_op = PythonOperator(task_id='metgrid',
                             python_callable=download_kelp,
                             dag=dag,
                             provide_context=True)
+
+kubernetes_cleanup_op = PythonOperator(task_id='kubernetes_gc',
+                                       python_callable=clean_completed_pods,
+                                       dag=dag,
+                                       provide_context=True)
 
 ungrib_operators = []
 
@@ -70,8 +88,8 @@ for i in range(1, 29):
                 'cd ' + EXECUTE_DIR + ';' +
                 '/wrf/WPS-3.9.1/ungrib.exe']
     ungrib_op = KubernetesPodOperator(namespace='airflow',
-                                      name='run-ungrib-{}'.format(forecast_hour),
-                                      task_id='run_ungrib_{}'.format(forecast_hour),
+                                      name='{}-{}'.format(POD_PREFIX, forecast_hour),
+                                      task_id='{}_{}'.format(POD_PREFIX, forecast_hour),
                                       dag=dag,
                                       volumes=[volume],
                                       volume_mounts=[volume_mount],
@@ -87,3 +105,4 @@ for i in range(1, 29):
     ungrib_operators.append(ungrib_op)
 
 metgrib_op.set_upstream(ungrib_operators)
+kubernetes_cleanup_op.set_upstream(metgrib_op)
