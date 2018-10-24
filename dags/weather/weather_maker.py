@@ -15,7 +15,7 @@ from kubernetes import client, config
 volume_mount = VolumeMount('test-dir',
                            mount_path='/data',
                            sub_path=None,
-                           read_only=True)
+                           read_only=False)
 
 volume_config = {
     'persistentVolumeClaim': {'claimName': 'airflow'}
@@ -55,7 +55,7 @@ dag = DAG('weather_maker', description='Extract weather input data and trigger f
 metgrib_op = PythonOperator(task_id='metgrid',
                             python_callable=download_kelp,
                             dag=dag,
-                            provide_context=True)
+                            provide_context=False)
 
 kubernetes_cleanup_op = PythonOperator(task_id='kubernetes_gc',
                                        python_callable=clean_completed_pods,
@@ -86,7 +86,10 @@ for i in range(1, 29):
                 'ln -sf /data/ungrib_test/ungrib/Vtable /tmp/Vtable;' +
                 'ln -sf /data/ungrib_test/ungrib/namelist.wps /tmp/namelist.wps;' +
                 'cd ' + EXECUTE_DIR + ';' +
-                '/wrf/WPS-3.9.1/ungrib.exe']
+                '/wrf/WPS-3.9.1/ungrib.exe;' + 
+                # HARD CODED File name, for example purposes
+                'cp /tmp/FILE:2018-09-10_09 /data/wxeye-output/'+filename_template+'-output;']
+
     ungrib_op = KubernetesPodOperator(namespace='airflow',
                                       name='{}-{}'.format(POD_PREFIX, forecast_hour),
                                       task_id='{}_{}'.format(POD_PREFIX, forecast_hour),
