@@ -55,7 +55,7 @@ dag = DAG('weather_maker', description='Extract weather input data and trigger f
 metgrib_op = PythonOperator(task_id='metgrid',
                             python_callable=download_kelp,
                             dag=dag,
-                            provide_context=False)
+                            provide_context=True)
 
 kubernetes_cleanup_op = PythonOperator(task_id='kubernetes_gc',
                                        python_callable=clean_completed_pods,
