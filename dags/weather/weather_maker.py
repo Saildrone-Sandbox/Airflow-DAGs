@@ -86,7 +86,7 @@ for i in range(1, 29):
                 'ln -sf /data/ungrib_test/ungrib/Vtable /tmp/Vtable;' +
                 'ln -sf /data/ungrib_test/ungrib/namelist.wps /tmp/namelist.wps;' +
                 'cd ' + EXECUTE_DIR + ';' +
-                '/wrf/WPS-3.9.1/ungrib.exe;' + 
+                '/wrf/ungrib.exe;' + 
                 # HARD CODED File name, for example purposes
                 'cp /tmp/FILE:2018-09-10_09 /data/wxeye-output/'+filename_template+'-output;']
 
@@ -97,7 +97,7 @@ for i in range(1, 29):
                                       volumes=[volume],
                                       volume_mounts=[volume_mount],
                                       image='quay.io/sdtechops/wrf-ungrib:0.1.0',
-                                      cmds=['bash', '-cx'],
+                                      cmds=['/bin/sh', '-cx'],
                                       arguments=pod_args,
                                       params={'base_dir': NAM_BASE_DIR,
                                               'f_type': 'nam'},
