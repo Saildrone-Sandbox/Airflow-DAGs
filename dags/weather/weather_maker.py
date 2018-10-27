@@ -86,9 +86,9 @@ for i in range(1, 29):
                 'ln -sf /data/ungrib_test/ungrib/Vtable /tmp/Vtable;' +
                 'ln -sf /data/ungrib_test/ungrib/namelist.wps /tmp/namelist.wps;' +
                 'cd ' + EXECUTE_DIR + ';' +
-                '/wrf/ungrib.exe;' + 
+                '/wrf/ungrib.exe;'] #+ 
                 # HARD CODED File name, for example purposes
-                'cp /tmp/FILE:2018-09-10_09 /data/wxeye-output/'+filename_template+'-output;']
+                #'cp /tmp/FILE:2018-09-10_09 /data/wxeye-output/'+filename_template+'-output;']
 
     ungrib_op = KubernetesPodOperator(namespace='airflow',
                                       name='{}-{}'.format(POD_PREFIX, forecast_hour),
